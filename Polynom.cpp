@@ -1,14 +1,12 @@
 //13518016
 //Indra Febrio Nugroho
-//17 Feb 2020
+//19 Feb 2020
 
-#include <vector>
-#include <iostream>
-#include <cstdlib>
-using namespace std;
+#include "Polynom.hpp"
 
 vector<int> BruteForce (vector<int> f, vector<int> g) {
-    vector<int> hasil.resize(f.size() + g.size() - 1);
+    vector<int> hasil;
+    hasil.resize(f.size() + g.size() - 1);
     for (int i=0; i<hasil.size(); i++) {
         hasil[i] = 0;
     }
@@ -67,19 +65,19 @@ vector<int> SubstractPoly(vector<int> f, vector<int> g) {
 }
 
 void DividePoly (vector<int> f, vector<int> g, vector<int> h) {
-    g.resize(div(f.size()+1,2));
-    h.resize(div(f.size()+1,2));
+    g.resize((int) (f.size()+1) / 2);
+    h.resize((int) (f.size()+1) / 2);
     for (int i=0; i<g.size(); i++) {
         g[i] = 0;
         h[i] = 0;
     }
 
     for (int i=0; i<f.size(); i++) {
-        if (i<div(f.size()+1,2)) {
+        if (i < (int) (f.size()+1) / 2) {
             g[i] = f[i];
         }
         else {
-            h[i - div(f.size()+1,2)] = f[i];
+            h[i - (int) (f.size()+1) / 2] = f[i];
         }
     }
 }
@@ -134,22 +132,22 @@ vector<int> KaratsubaAlgorithm(vector<int> f, vector<int> g) {
         vector<int> shiftedC1;
         vector<int> shiftedC2;
 
-        int m1 = div(n+1,2) + c1.size();
-        int m2 = 2*div(n+1,2) + c2.size();
+        int m1 = ((int) (n+1) / 2) + c1.size();
+        int m2 = 2* ((int) (n+1) / 2) + c2.size();
         
         for (int i=0; i<m1; i++) {
             shiftedC1.push_back(0);
-            if (i >= div(n+1,2)) {
-                shiftedC1[i] = c1[i - div(n+1,2)];
+            if (i >= (int) (n+1) / 2) {
+                shiftedC1[i] = c1[i - ((int) (n+1) / 2)];
             }
         }
         for (int i=0; i<m2; i++) {
             shiftedC2.push_back(0);
-            if (i >= 2*div(n+1,2)) {
-                shiftedC2[i] = c2[i - 2*div(n+1,2)];
+            if (i >= 2 * ((int) (n+1) / 2)) {
+                shiftedC2[i] = c2[i - 2 * ((int) (n+1) / 2)];
             }
         }
 
-
+        return SumPoly(c0, SumPoly(shiftedC1, shiftedC2));
     }
 }
