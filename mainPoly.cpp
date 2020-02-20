@@ -8,8 +8,9 @@ int main() {
     int N;
     cout << "Input N: ";
     cin >> N;
+    cout << endl;
 
-    vector<int> f, g, hasil;
+    vector<int> f, g, resultBF, resultDNC;
 
     srand(time(NULL));
     for (int i=0; i<N+1; i++) {
@@ -17,24 +18,42 @@ int main() {
         g.push_back((rand() % 200) - 100);
     }
 
-    // f.push_back(69);
-    // f.push_back(-48);
-    // f.push_back(-64);
-
-    // g.push_back(65);
-    // g.push_back(-56);
-    // g.push_back(76);
-
-    cout << "Generated f is\n";
+    cout << "1st Generated Polynom is\n";
     PrintPoly(f);
-    cout << "Generated g is\n";
+    cout << "2nd Generated Polynom is\n";
     PrintPoly(g);
+    cout << endl;
 
+    //Brute Force
     int nSum = 0;
     int NMultiply = 0;
-    hasil = KaratsubaAlgorithm(f,g,&nSum,&NMultiply);
 
-    cout << "Result is\n";
-    PrintPoly(hasil);
+    //Time execution by brute force
+    auto startBF = high_resolution_clock::now();
+    resultBF = BruteForce(f,g,&nSum,&NMultiply);
+    auto endBF = high_resolution_clock::now();
+    auto durationBF = duration_cast<microseconds> (endBF - startBF);
+
+    cout << "Result of Polynom Multiplication by Brute Force is\n";
+    PrintPoly(resultBF);
+    cout << "Total Sum Operation: " << nSum << endl;
+    cout << "Total Multiplication Operation: " << NMultiply << endl;
+    cout << "Executed Time: " << durationBF.count() << " ms" << endl << endl;
+
+    //Divide and Conquer
+    nSum = 0;
+    NMultiply = 0;
+
+    //Time execution by divide and conquer
+    auto startDNC = high_resolution_clock::now();
+    resultDNC = DivideAndConquer(f,g,&nSum,&NMultiply);
+    auto endDNC = high_resolution_clock::now();
+    auto durationDNC = duration_cast<microseconds> (endDNC - startDNC);
+
+    cout << "Result of Polynom Multiplication by Divide and Conquer is\n";
+    PrintPoly(resultDNC);
+    cout << "Total Sum Operation: " << nSum << endl;
+    cout << "Total Multiplication Operation: " << NMultiply << endl;
+    cout << "Executed Time: " << durationDNC.count() << " ms" << endl;
     return 0;
 }

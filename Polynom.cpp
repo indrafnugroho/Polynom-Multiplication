@@ -4,7 +4,7 @@
 
 #include "Polynom.hpp"
 
-vector<int> BruteForce (vector<int> f, vector<int> g) {
+vector<int> BruteForce (vector<int> f, vector<int> g, int* nSum, int* nMultiply) {
     vector<int> hasil;
     for (int i=0; i < (f.size() + g.size() - 1); i++) {
         hasil.push_back(0);
@@ -12,6 +12,8 @@ vector<int> BruteForce (vector<int> f, vector<int> g) {
     for (int i=0; i<f.size(); i++) {
         for (int j=0; j<g.size(); j++) {
             hasil[i+j] += f[i] * g[j];
+            (*nSum)++;
+            (*nMultiply)++;
         }
     }
     return hasil;
@@ -123,14 +125,14 @@ void PrintPoly(vector<int> f) {
     cout << endl;
 }
 
-vector<int> KaratsubaAlgorithm(vector<int> f, vector<int> g, int* nSum, int* nMultiply) {
+vector<int> DivideAndConquer(vector<int> f, vector<int> g, int* nSum, int* nMultiply) {
     int n = f.size();
 
     //Basis
     if (n == 1) {
         vector<int> result;
         result.push_back(f[0] * g[0]);
-        // result = BruteForce(f,g);
+        (*nMultiply)++;
         return result;
     }
     else {
@@ -142,13 +144,14 @@ vector<int> KaratsubaAlgorithm(vector<int> f, vector<int> g, int* nSum, int* nMu
         DividePoly(g, &g0, &g1);
 
         //Count c0, c1, c2
-        vector<int> c0 = KaratsubaAlgorithm(f0, g0, nSum, nMultiply);
+        vector<int> c0 = DivideAndConquer(f0, g0, nSum, nMultiply);
         vector<int> c1;
-        vector<int> c2 = KaratsubaAlgorithm(f1, g1, nSum, nMultiply);
+        vector<int> c2 = DivideAndConquer(f1, g1, nSum, nMultiply);
     
         vector<int> temp0 = SumPoly(f0,f1);
         vector<int> temp1 = SumPoly(g0,g1);
-        vector<int> temp2 = KaratsubaAlgorithm (temp0, temp1, nSum, nMultiply);
+        vector<int> temp2 = DivideAndConquer (temp0, temp1, nSum, nMultiply);
+        (*nSum) += 2;
     
         c1 = SubstractPoly(temp2, SumPoly(c2,c0));
 
