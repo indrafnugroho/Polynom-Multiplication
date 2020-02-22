@@ -4,14 +4,17 @@
 
 #include "Polynom.hpp"
 
-vector<int> BruteForce (vector<int> f, vector<int> g, int* nSum, int* nMultiply) {
+vector<int> BruteForce (vector<int> p1, vector<int> p2, int* nSum, int* nMultiply) {
+    //Make an array with p1+p2-1 size
     vector<int> hasil;
-    for (int i=0; i < (f.size() + g.size() - 1); i++) {
+    for (int i=0; i < (p1.size() + p2.size() - 1); i++) {
         hasil.push_back(0);
     }
-    for (int i=0; i<f.size(); i++) {
-        for (int j=0; j<g.size(); j++) {
-            hasil[i+j] += f[i] * g[j];
+
+    //Do brute force algorithm by multiplying each coefficient
+    for (int i=0; i<p1.size(); i++) {
+        for (int j=0; j<p2.size(); j++) {
+            hasil[i+j] += p1[i] * p2[j];
             (*nSum)++;
             (*nMultiply)++;
         }
@@ -19,65 +22,70 @@ vector<int> BruteForce (vector<int> f, vector<int> g, int* nSum, int* nMultiply)
     return hasil;
 }
 
-vector<int> SumPoly(vector<int> f, vector<int> g) {
+vector<int> SumPoly(vector<int> p1, vector<int> p2) {
     vector<int> hasil;
-    if (f.size() <= g.size()) {
-        for (int i=0; i<g.size(); i++) {
+    //first condition
+    if (p1.size() <= p2.size()) {
+        for (int i=0; i<p2.size(); i++) {
             hasil.push_back(0);
-            if (i >= f.size()) {
-                hasil[i] = g[i];
+            if (i >= p1.size()) {
+                hasil[i] = p2[i];
             } else {
-                hasil[i] = f[i] + g[i];
+                hasil[i] = p1[i] + p2[i];
             }
         }
-    } else {
-        for (int i=0; i<f.size(); i++) {
+    } //second condition
+    else {
+        for (int i=0; i<p1.size(); i++) {
             hasil.push_back(0);
-            if (i >= g.size()) {
-                hasil[i] = f[i];
+            if (i >= p2.size()) {
+                hasil[i] = p1[i];
             } else {
-                hasil[i] = f[i] + g[i];
+                hasil[i] = p1[i] + p2[i];
             }
         }
     } return hasil;
 }
 
-vector<int> SubstractPoly(vector<int> f, vector<int> g) {
+vector<int> SubstractPoly(vector<int> p1, vector<int> p2) {
     vector<int> hasil;
-    if (f.size() <= g.size()) {
-        for (int i=0; i<g.size(); i++) {
+    //first condition
+    if (p1.size() <= p2.size()) {
+        for (int i=0; i<p2.size(); i++) {
             hasil.push_back(0);
-            if (i >= f.size()) {
-                hasil[i] = 0 - g[i];
+            if (i >= p1.size()) {
+                hasil[i] = 0 - p2[i];
             } else {
-                hasil[i] = f[i] - g[i];
+                hasil[i] = p1[i] - p2[i];
             }
         }
-    } else {
-        for (int i=0; i<f.size(); i++) {
+    } //second condition
+    else {
+        for (int i=0; i<p1.size(); i++) {
             hasil.push_back(0);
-            if (i >= g.size()) {
-                hasil[i] = 0 - f[i];
+            if (i >= p2.size()) {
+                hasil[i] = 0 - p1[i];
             } else {
-                hasil[i] = f[i] - g[i];
+                hasil[i] = p1[i] - p2[i];
             }
         }
     } return hasil;
 }
 
-void DividePoly (vector<int> f, vector<int>* g, vector<int>* h) {
-    for (int i=0; i<f.size(); i++) {
-        if (i < (int) (f.size()+1) / 2) {
-            g->push_back(f[i]);
-        }
+void DividePoly (vector<int> basePoly, vector<int>* p1, vector<int>* p2) {
+    for (int i=0; i<basePoly.size(); i++) {
+        //first divide half of basePoly into p1
+        if (i < (int) (basePoly.size()+1) / 2) {
+            p1->push_back(basePoly[i]);
+        } //then divide another half of basePoly into p2 
         else {
-            h->push_back(f[i]);
+            p2->push_back(basePoly[i]);
         }
     }
 }
 
-vector<int> CombinePoly(vector<int> g, vector<int> h, vector<int> i) {
-    return SumPoly(g, SumPoly(h, i));
+vector<int> MergePoly(vector<int> p1, vector<int> p2, vector<int> p3) {
+    return SumPoly(p1, SumPoly(p2, p3));
 }
 
 void ShiftPoly(vector<int>* c1, vector<int>* c2, int n) {
@@ -110,13 +118,17 @@ void ShiftPoly(vector<int>* c1, vector<int>* c2, int n) {
 void PrintPoly(vector<int> f) {
     for (int i=0; i < f.size(); i++) {
         if (i==0) {
-            cout << f[i];
-        }
-        else {
+            if (f[i] == 0) continue;
+            else cout << f[i];
+        } else {
             if (f[i] > 0) {
-                cout << " + " << f[i] << "x^" << i;
+                cout << " + " << f[i];
+                if (i!=1) cout << "x^" << i;
+                else cout << "x";
             } else if (f[i] < 0) {
-                cout << " - " << f[i]*(-1) << "x^" << i;
+                cout << " - " << f[i]*(-1);
+                if (i!=1) cout << "x^" << i;
+                else cout << "x";
             } else {
                 continue;
             }
@@ -128,7 +140,7 @@ void PrintPoly(vector<int> f) {
 vector<int> DivideAndConquer(vector<int> f, vector<int> g, int* nSum, int* nMultiply) {
     int n = f.size();
 
-    //Basis
+    //Base
     if (n == 1) {
         vector<int> result;
         result.push_back(f[0] * g[0]);
@@ -157,8 +169,6 @@ vector<int> DivideAndConquer(vector<int> f, vector<int> g, int* nSum, int* nMult
 
         //Merge c0, c1, c2
         ShiftPoly(&c1,&c2,n);
-        // PrintPoly(CombinePoly(c1,c2));
-        // PrintPoly(SumPoly(c1,c2));
-        return CombinePoly(c0,c1,c2);
+        return MergePoly(c0,c1,c2);
     }
 }

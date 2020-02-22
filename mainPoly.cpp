@@ -14,6 +14,7 @@ int main() {
 
     srand(time(NULL));
     for (int i=0; i<N+1; i++) {
+        //randomize coefficient between (-100) and 100
         f.push_back((rand() % 200) - 100);
         g.push_back((rand() % 200) - 100);
     }
@@ -54,6 +55,11 @@ int main() {
     PrintPoly(resultDNC);
     cout << "Total Sum Operation: " << nSum << endl;
     cout << "Total Multiplication Operation: " << NMultiply << endl;
-    cout << "Executed Time: " << durationDNC.count() << " ms" << endl;
+    cout << "Executed Time: " << durationDNC.count() << " ms" << endl << endl;
+
+    cout << "Program is executed in a computer with spesification below\n" ;
+    cout << "Processor: AMD E-300 APU with Radeon HD Graphics 1.30 GHz\n";
+    cout << "RAM: 2GB\n";
+    cout << "Operating system: Ubuntu 19.10\n";
     return 0;
 }
