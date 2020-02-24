@@ -115,18 +115,18 @@ void ShiftPoly(vector<int>* c1, vector<int>* c2, int n) {
     }
 }
 
-void PrintPoly(vector<int> f) {
-    for (int i=0; i < f.size(); i++) {
+void PrintPoly(vector<int> p) {
+    for (int i=0; i < p.size(); i++) {
         if (i==0) {
-            if (f[i] == 0) continue;
-            else cout << f[i];
+            if (p[i] == 0) continue;
+            else cout << p[i];
         } else {
-            if (f[i] > 0) {
-                cout << " + " << f[i];
+            if (p[i] > 0) {
+                cout << " + " << p[i];
                 if (i!=1) cout << "x^" << i;
                 else cout << "x";
-            } else if (f[i] < 0) {
-                cout << " - " << f[i]*(-1);
+            } else if (p[i] < 0) {
+                cout << " - " << p[i]*(-1);
                 if (i!=1) cout << "x^" << i;
                 else cout << "x";
             } else {
