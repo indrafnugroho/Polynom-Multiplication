@@ -163,9 +163,9 @@ vector<int> DivideAndConquer(vector<int> f, vector<int> g, int* nSum, int* nMult
         vector<int> temp0 = SumPoly(f0,f1);
         vector<int> temp1 = SumPoly(g0,g1);
         vector<int> temp2 = DivideAndConquer (temp0, temp1, nSum, nMultiply);
-        (*nSum) += 2;
-    
+        
         c1 = SubstractPoly(temp2, SumPoly(c2,c0));
+        (*nSum) += 6 * f1.size();
 
         //Merge c0, c1, c2
         ShiftPoly(&c1,&c2,n);
